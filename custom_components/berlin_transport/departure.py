@@ -29,7 +29,7 @@ class Departure:
         line_visuals = TRANSPORT_TYPE_VISUALS.get(line_type) or {}
         timestamp=datetime.fromisoformat(source.get("when") or source.get("plannedWhen"))
         timestamp_planned=datetime.fromisoformat(source.get("plannedWhen"))
-        delay=source.get("delay") or int((timestamp - timestamp_planned).total_seconds() / 60)
+        delay=int(source.get("delay") or (timestamp - timestamp_planned).total_seconds())
         return cls(
             trip_id=source["tripId"],
             line_name=source.get("line", {}).get("name"),
