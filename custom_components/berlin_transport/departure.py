@@ -14,6 +14,8 @@ class Departure:
     line_type: str
     timestamp: datetime
     time: datetime
+    time_planned: datetime
+    delay: int
     direction: str | None = None
     icon: str | None = None
     bg_color: str | None = None
@@ -26,12 +28,16 @@ class Departure:
         line_type = source.get("line", {}).get("product")
         line_visuals = TRANSPORT_TYPE_VISUALS.get(line_type) or {}
         timestamp=datetime.fromisoformat(source.get("when") or source.get("plannedWhen"))
+        timestamp_planned=datetime.fromisoformat(source.get("plannedWhen"))
+        delay=source.get("delay") or int((timestamp - timestamp_planned).total_seconds() / 60)
         return cls(
             trip_id=source["tripId"],
             line_name=source.get("line", {}).get("name"),
             line_type=line_type,
             timestamp=timestamp,
             time=timestamp.strftime("%H:%M"),
+            time_planned=timestamp_planned.strftime("%H:%M"),
+            delay=delay,
             direction=source.get("direction"),
             icon=line_visuals.get("icon") or DEFAULT_ICON,
             bg_color=source.get("line", {}).get("color", {}).get("bg"),
@@ -51,6 +57,8 @@ class Departure:
             "line_name": self.line_name,
             "line_type": self.line_type,
             "time": self.time,
+            "time_planned": self.time_planned,
+            "delay": self.delay,
             "direction": self.direction,
             "color": color,
             "cancelled": self.cancelled,
