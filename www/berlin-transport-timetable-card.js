@@ -36,7 +36,8 @@ class BerlinTransportTimetableCard extends HTMLElement {
                         <div class="line-icon" style="background-color: ${departure.color}">${departure.line_name}</div>
                     </div>
                     <div class="direction">${departure.direction}</div>
-                    <div class="time">${departure.time}</div>
+                    <div class="time-planned">${departure.time_planned}</div>
+                    <div class="delay">(${departure.delay})</div>
                 </div>`
             );
 
@@ -112,7 +113,7 @@ class BerlinTransportTimetableCard extends HTMLElement {
                 align-self: center;
                 flex-grow: 1;
             }
-            .time {
+            .time, .time-planned, .delay {
                 align-self: flex-start;
                 font-weight: 700;
                 line-height: 2em;
